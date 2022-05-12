@@ -3,12 +3,10 @@ project(Argz)
 
 set(CMAKE_CXX_STANDARD 11)
 
-if(EXISTS ${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    conan_basic_setup()
-else()
-    message(WARNING "The file conanbuildinfo.cmake doesn't exist, you have to run conan install first")
-endif()
+# BOOST
+find_package(Boost 1.70 REQUIRED COMPONENTS filesystem)
+message(STATUS "Boost version: ${Boost_VERSION}")
+include_directories(${Boost_INCLUDE_DIRS})
 
 #
 include_directories(include)
