@@ -4,6 +4,17 @@
 
 #include "Argz/Args.hh"
 
+bool case_insensitive_compare(char a, char b) {
+  return std::tolower(a) == std::tolower(b);
+}
+
+bool iequals(const std::string& a, const std::string& b) {
+  if (a.length() != b.length()) {
+	return false;
+  }
+  return std::equal(a.begin(), a.end(), b.begin(), case_insensitive_compare);
+}
+
 void Args::ProcessArgs(const int& argc, char *argv[]) {
 
   // Reading user input parameters

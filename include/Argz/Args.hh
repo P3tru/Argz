@@ -9,6 +9,12 @@
 #include <vector>
 #include <iostream>
 
+#include <algorithm>
+#include <cctype>
+
+bool case_insensitive_compare(char a, char b);
+bool iequals(const std::string& a, const std::string& b);
+
 //
 //
 //
@@ -29,7 +35,6 @@ struct TArg : public BaseArg {
 	  : BaseArg(flag_short, flag_long), val(std::move(val)) {}
   ~TArg() override = default;
 };
-#include <boost/algorithm/string/predicate.hpp>
 typedef struct sArg : public TArg<std::string>{
   sArg(const std::string &flag_short, const std::string &flag_long)
 	  : TArg(flag_short, flag_long) {}
@@ -37,7 +42,7 @@ typedef struct sArg : public TArg<std::string>{
 	  : TArg(flag_short, flag_long, val) {}
   bool operator()(const std::string &arg,
 				  const int& argc, char *argv[], int &i) override {
-	if (boost::iequals(arg, flag_short) || boost::iequals(arg, flag_long)) {
+	if (iequals(arg, flag_short) || iequals(arg, flag_long)) {
 	  val=argv[++i];
 	  return true;
 	} else {
@@ -50,7 +55,7 @@ typedef struct bArg : public TArg<bool>{
 	  : TArg(flag_short, flag_long) { val = false;}
   bool operator()(const std::string &arg,
 				  const int& argc, char *argv[], int &i) override {
-	if (boost::iequals(arg, flag_short) || boost::iequals(arg, flag_long)) {
+	if (iequals(arg, flag_short) || iequals(arg, flag_long)) {
 	  val=true;
 	  return true;
 	} else {
@@ -65,7 +70,7 @@ typedef struct iArg : public TArg<int>{
 	  : TArg(flag_short, flag_long, val) {}
   bool operator()(const std::string &arg,
 				  const int& argc, char *argv[], int &i) override {
-	if (boost::iequals(arg, flag_short) || boost::iequals(arg, flag_long)) {
+	if (iequals(arg, flag_short) || iequals(arg, flag_long)) {
 	  try{
 		val=std::stoi(argv[++i]);
 		return true;
@@ -85,7 +90,7 @@ typedef struct fArg : public TArg<float>{
 	  : TArg(flag_short, flag_long, val) {}
   bool operator()(const std::string &arg,
 				  const int& argc, char *argv[], int &i) override {
-	if (boost::iequals(arg, flag_short) || boost::iequals(arg, flag_long)) {
+	if (iequals(arg, flag_short) || iequals(arg, flag_long)) {
 	  try{
 		val=std::stof(argv[++i]);
 		return true;
@@ -105,7 +110,7 @@ typedef struct vfArg : public TArg<std::vector<float>>{
 	  : TArg(flag_short, flag_long, val) {}
   bool operator()(const std::string &arg,
 				  const int& argc, char *argv[], int &i) override {
-	if (boost::iequals(arg, flag_short) || boost::iequals(arg, flag_long)) {
+	if (iequals(arg, flag_short) || iequals(arg, flag_long)) {
 	  val.clear();
 	  for(++i; i<argc; i++){
 		std::string argg = argv[i];
